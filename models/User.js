@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
         required: false
     },
     card_id: {
-        type: String,
+        type: Number,
         required: true
     },
     address: {
@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     phone: {
-        type: String,
+        type: Number,
         required: true
     },
     user_type: {
