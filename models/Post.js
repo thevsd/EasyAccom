@@ -5,14 +5,22 @@ const PostSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	status: {
+	title: {
 		type: String,
+		required: true,
+	},
+	status: {
+		type: Boolean,
 		required: true,
     },
     address: {
 		type: String,
 		required: true,
-    },
+	},
+	proximity: {
+		type: String,
+		required: false,
+	},
     type: {
 		type: String,
 		required: true,
@@ -25,9 +33,29 @@ const PostSchema = new mongoose.Schema({
 		type: String,
 		required: true,
     },
-    description: {
+    bath: {
 		type: String,
 		required: true,
+	},
+	kitchen: {
+		type: String,
+		required: true,
+	},
+	ac: {
+		type: String,
+		required: true,
+	},
+	balcony: {
+		type: String,
+		required: true,
+	},
+	elec_water: {
+		type: String,
+		required: true,
+	},
+	others: {
+		type: String,
+		required: false,
     },
     picture: {
 		type: String,

@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    update_permit: {
+        type: Boolean,
+        required: false
+    },
     status: {
         type: Boolean,
         required: true

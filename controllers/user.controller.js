@@ -32,8 +32,17 @@ const register = async (req, res, next) => {
 
 	const user = new User({
 		...req.body,
+		update_permit: false,
+		status: false,
 		avatar: 'uploads/images/default-avatar.png'
 	});
+
+	// If user is renter
+	if(user.user_type.equals("Renter")) {
+		console.log("User is renter");
+		user.status = true;
+		user.update_permit = true;
+	}
 
 	// Hash password
 	user.password = await bcrypt.hash(req.body.password, 10);
@@ -76,7 +85,7 @@ const login = async (req, res, next) => {
 	}
 
 	if (bcrypt.compareSync(req.body.password, user.password)) {
-		const token = jwt.sign({ email: user.email }, config, { expiresIn: '7d' });
+		const token = jwt.sign({ email: user.email, user_type: user.user_type }, config, { expiresIn: '7d' });
 		res.status(201).json({
 			user: {
 				userId: user.id,
@@ -170,6 +179,7 @@ const update = async (req, res, next) => {
 		return;
 	}
 
+	// Prevent other people update your profile
 	if (user.email !== req.userData.email) {
 		res
 			.status(401)
@@ -177,8 +187,34 @@ const update = async (req, res, next) => {
 		return;
 	}
 
-	if (req.body.description) {
-		user.description = req.body.description;
+	// Check if it's the Owner and has the permit 
+	if (user.user_type.equals("Owner")) {
+		if (!user.update_permit) {
+			res.status(401).json({ message: 'Contact your admin for further changes'});
+			return;
+		} else {
+			user.update_permit = false;
+		}
+	}
+
+	if (req.body.fullname) {
+		user.fullname = req.body.fullname;
+	}
+
+	if (req.body.card_id) {
+		user.card_id = req.body.card_id;
+	}
+
+	if (req.body.address) {
+		user.address = req.body.address;
+	}
+
+	if (req.body.phone) {
+		user.phone = req.body.phone;
+	}
+
+	if (req.body.password) {
+		user.password = await bcrypt.hash(req.body.password, 10);;
 	}
 
 	// Delete old images and replace with new ones (if needed)
@@ -206,6 +242,57 @@ const _delete = async (req, res, _next) => {
 	res.status(201).json({});
 };
 
+const permit_update = async (req, res, next) => {
+
+	if (!req.userData.user_type.equals("Admin")) {
+		console.log("You are not an Admin!");
+		res.status(401).json({ message: 'You are not an Admin!' });
+		return;
+	}
+
+	let target;
+	try {
+		target = await User.find({ email: req.params.email }, '-password');
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	target.permit_update = true;
+
+	try {
+		await target.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Update permit failed' });
+		return next(err);
+	}
+}
+
+const permit_account = async (req, res, next) => {
+	if (!req.userData.user_type.equals("Admin")) {
+		console.log("You are not an Admin!");
+		res.status(401).json({ message: 'You are not an Admin!' });
+		return;
+	}
+
+	let target;
+	try {
+		target = await User.find({ email: req.params.email }, '-password');
+	} catch (err) {
+		res.status(500).json({ message: 'Fetch failed' });
+		return next(err);
+	}
+
+	target.status = true;
+
+	try {
+		await target.save();
+	} catch (err) {
+		res.status(500).json({ message: 'Update permit failed' });
+		return next(err);
+	}
+}
+
 exports.register = register;
 exports.login = login;
 exports.getAll = getAll;
@@ -214,3 +301,5 @@ exports.getByName = getByName;
 exports.avatarByName = avatarByName;
 exports.update = update;
 exports.delete = _delete;
+exports.permit_update = permit_update;
+exports.permit_account = permit_account;

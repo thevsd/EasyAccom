@@ -14,19 +14,17 @@ router.post('/authenticate', userController.login);
 
 router.use(checkAuth);
 router.post(
-	'/:name',
+	'/:email',
 	fileUpload.fields([
 		{
 			name: 'avatar',
-			maxCount: 1,
-		},
-		{
-			name: 'cover',
 			maxCount: 1,
 		},
 	]),
 	userController.update
 );
 router.delete('/:id', userController.delete);
+router.post('/admin/grant_update/:email', userController.permit_update);
+router.post('/admin/grant_account/:email', userController.permit_account);
 
 module.exports = router;
