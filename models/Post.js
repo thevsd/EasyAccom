@@ -26,7 +26,7 @@ const PostSchema = new mongoose.Schema({
 		required: true,
     },
     price: {
-		type: String,
+		type: Number,
 		required: true,
     },
     area: {
@@ -66,11 +66,11 @@ const PostSchema = new mongoose.Schema({
 		required: true,
     },
     views: {
-		type: String,
+		type: Number,
 		required: true,
     },
     likes: {
-		type: String,
+		type: Number,
 		required: true,
     },
 	date: { 
