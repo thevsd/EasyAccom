@@ -10,7 +10,7 @@ router.get('/user/:user', postController.getByUser);
 
 router.use(checkAuth);
 
-router.post('/create', fileUpload.single('cover'), postController.create);
+router.post('/create/:user_id', fileUpload.single('cover'), postController.create);
 router.delete('/:post_id', postController.delete);
 router.post('/:post_id', fileUpload.single('cover'), postController.update);
 
