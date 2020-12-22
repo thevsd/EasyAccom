@@ -40,6 +40,10 @@ const UserSchema = new mongoose.Schema({
     user_type: {
         type: String,
         required: true
+    },
+    payment: {
+        type: Number,
+        required: true
     }
 });
 

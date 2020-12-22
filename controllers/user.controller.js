@@ -54,7 +54,7 @@ const register = async (req, res, next) => {
 		return next(err);
 	}
 
-	const token = jwt.sign({ fullname: user.fullname }, config, { expiresIn: '7d' });
+	const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.user_id }, config, { expiresIn: '7d' });
 	res.status(201).json({
 		user: {
 			userId: user.id,
@@ -85,7 +85,7 @@ const login = async (req, res, next) => {
 	}
 
 	if (bcrypt.compareSync(req.body.password, user.password)) {
-		const token = jwt.sign({ email: user.email, user_type: user.user_type }, config, { expiresIn: '7d' });
+		const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.user_id }, config, { expiresIn: '7d' });
 		res.status(201).json({
 			user: {
 				userId: user.id,
