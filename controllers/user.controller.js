@@ -244,7 +244,7 @@ const _delete = async (req, res, _next) => {
 
 const permit_update = async (req, res, next) => {
 
-	if (!req.userData.user_type.equals("Admin")) {
+	if (req.userData.user_type !== "Admin") {
 		console.log("You are not an Admin!");
 		res.status(401).json({ message: 'You are not an Admin!' });
 		return;
@@ -269,7 +269,7 @@ const permit_update = async (req, res, next) => {
 }
 
 const permit_account = async (req, res, next) => {
-	if (!req.userData.user_type.equals("Admin")) {
+	if (req.userData.user_type !== "Admin") {
 		console.log("You are not an Admin!");
 		res.status(401).json({ message: 'You are not an Admin!' });
 		return;
