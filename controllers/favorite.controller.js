@@ -17,7 +17,7 @@ const getByUser = async (req, res, next) => {
     }
 
     res.json(favorite);
-}
+};
 
 const _delete = async (req, res, next) => {
     let favorite;
@@ -35,7 +35,7 @@ const _delete = async (req, res, next) => {
 
     await favorite.deleteOne(favorite)
     res.status(201).json({});
-}
+};
 
 exports.getByUser = getByUser;
 exports.delete = _delete;

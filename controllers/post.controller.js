@@ -239,7 +239,7 @@ const like = async (req, res, next) => {
 		return next(err);
 	}
 	res.status(200).json(post);
-}
+};
 
 const extend = async (req, res, next) => {
 	// Get the current post
@@ -277,7 +277,7 @@ const extend = async (req, res, next) => {
 		return next(err);
 	}
 	res.status(200).json(post);
-}
+};
 
 const confirmExtend = async (req, res, next) => {
 	let post;
@@ -311,7 +311,7 @@ const confirmExtend = async (req, res, next) => {
 		return next(err);
 	}
 	res.status(200).json(post);
-}
+};
 
 const confirm = async (req, res, next) => {
 	let post;
@@ -343,7 +343,7 @@ const confirm = async (req, res, next) => {
 		return next(err);
 	}
 	res.status(200).json(post);
-}
+};
 
 exports.getAll = getAll;
 exports.getByUser = getByUser;
