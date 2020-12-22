@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fileUpload = require('../middleware/file-upload');
-const postController = require('../controllers/blog.controller');
+const postController = require('../controllers/post.controller');
 const checkAuth = require('../middleware/check-auth');
 
 router.get('/', postController.getAll);
@@ -13,5 +13,8 @@ router.use(checkAuth);
 router.post('/create/:user_id', fileUpload.single('cover'), postController.create);
 router.delete('/:post_id', postController.delete);
 router.post('/:post_id', fileUpload.single('cover'), postController.update);
+router.post('/extend/:post_id', postController.extend);
+router.post('/confirm_extend/:post_id', postController.confirmExtend);
+router.post('/like/:post_id', postController.like);
 
 module.exports = router;

@@ -24,6 +24,10 @@ const PostSchema = new mongoose.Schema({
     type: {
 		type: String,
 		required: true,
+	},
+	rented: {
+		type: Boolean,
+		required: true,
     },
     price: {
 		type: Number,
@@ -75,8 +79,20 @@ const PostSchema = new mongoose.Schema({
     },
 	date: { 
         type: Date, 
-        required: true 
-    },
+        required: true,
+	},
+	extend_date: {
+		type: Date,
+		required: true,
+	},
+	pay_to_extend: {
+		type: Number,
+		required: true,
+	},
+	backup_extend : {
+		type: Date,
+		required: false,
+	}
 });
 
 const Post = mongoose.model('Post', PostSchema);
