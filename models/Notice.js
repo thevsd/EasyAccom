@@ -13,6 +13,10 @@ const NoticeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    date: { 
+        type: Date, 
+        required: true,
+	},
 });
 
 const Notice = mongoose.model('Notice', NoticeSchema);
