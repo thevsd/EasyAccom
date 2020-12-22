@@ -6,18 +6,7 @@ const schema = Joi.object().keys({
     email : Joi.string().trim().email().required().messages({
         'string.base' : 'Invalid email',
         'string.empty' : 'Please enter your email'
-    }),
-    password : PasswordComplexity({
-        min : 8,
-        max : 25,
-        lowerCase : 1,
-        upperCase : 1,
-        numeric : 1,
-        requirementCount : 2,
-    }).required().messages({
-        'password.min' : 'The password must be longer than 8 characters',
-        'password.max' : 'The password must be less than 25 characters',
-    }),
+    })
 })
 
 module.exports = schema
