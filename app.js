@@ -20,10 +20,10 @@ app.use(express.static(path.join('public')));
 // Routes
 app.use('/api/user', require('./routes/user.route'));
 app.use('/api/post', require('./routes/post.route'));
-app.use('/api/favorite', require('./routes/favorites.route'));
-app.use('/api/notice', require('./routes/notice.route'));
-app.use('/api/report', require('./routes/reports.route'));
-app.use('/api/chat', require('./routes/chat.route'));
+// app.use('/api/favorite', require('./routes/favorites.route'));
+// app.use('/api/notice', require('./routes/notice.route'));
+// app.use('/api/report', require('./routes/reports.route'));
+// app.use('/api/chat', require('./routes/chat.route'));
 
 app.use((req, res, next) => {
 	res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
