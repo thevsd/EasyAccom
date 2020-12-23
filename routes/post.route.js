@@ -14,7 +14,6 @@ router.post('/create/:user_id', fileUpload.single('cover'), postController.creat
 router.delete('/:post_id', postController.delete);
 router.post('/:post_id', fileUpload.single('cover'), postController.update);
 router.post('/extend/:post_id', postController.extend);
-router.post('/confirm_extend/:post_id', postController.confirmExtend);
 router.post('/like/:post_id', postController.like);
 
 module.exports = router;

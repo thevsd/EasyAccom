@@ -17,12 +17,16 @@ const PostSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	proximity: {
+	nearby: {
 		type: String,
 		required: false,
 	},
-    type: {
+    roomType: {
 		type: String,
+		required: true,
+	},
+	roomNum: {
+		type: Number,
 		required: true,
 	},
 	rented: {
@@ -32,11 +36,19 @@ const PostSchema = new mongoose.Schema({
     price: {
 		type: Number,
 		required: true,
-    },
+	},
+	priceType: {
+		type: String,
+		required: true,
+	},
     area: {
 		type: Number,
 		required: true,
-    },
+	},
+	shared: {
+		type: Boolean,
+		required: true,
+	},
     bath: {
 		type: String,
 		required: true,
@@ -61,8 +73,8 @@ const PostSchema = new mongoose.Schema({
 		type: String,
 		required: false,
     },
-    picture: {
-		type: String,
+    images: {
+		type: Array,
 		required: true,
     },
     contact: {
@@ -76,7 +88,15 @@ const PostSchema = new mongoose.Schema({
     likes: {
 		type: Number,
 		required: true,
-    },
+	},
+	rateSum: {
+		type: Number,
+		required: true,
+	},
+	rateCount: {
+		type: Number,
+		required: true,
+	},
 	date: { 
         type: Date, 
         required: true,

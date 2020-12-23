@@ -70,9 +70,13 @@ const create = async (req, res, next) => {
 		title: req.body.title,
         address: req.body.address,
         type: req.body.type,
-        price: req.body.price,
-        proximity: req.body.proximity,
-        area: req.body.area,
+		price: req.body.price,
+		priceType: req.body.priceType,
+		nearby: req.body.nearby,
+		roomType: req.body.roomType,
+		roomNum: req.body.roomNum,
+		area: req.body.area,
+		shared: req.body.shared,
         bath: req.body.bath,
         kitchen: req.body.kitchen,
         ac: req.body.ac,
@@ -81,6 +85,8 @@ const create = async (req, res, next) => {
         others: req.body.others,
         contact: req.body.contact,
 		picture: req.file.path,
+		rateSum: 0,
+		rateCount: 0,
         date: Date.now(),
         status: false,
 		rented: false,
@@ -279,70 +285,23 @@ const extend = async (req, res, next) => {
 	res.status(200).json(post);
 };
 
-const confirmExtend = async (req, res, next) => {
+const rate = async (req, res, next) => {
+	// Get the current post
 	let post;
 	try {
-		post = await Post.findById(req.params.post_id);
+		post = await post.findById(req.params.post_id);
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
 	}
 
-	if (req.userData.user_type !== "Admin") {
-		res
-			.status(401)
-			.json({ message: 'You are not Admin!' });
+	if(req.userData.user_type === "Owner" ) {
+		res.status(401).json({ message: 'Owner cant rate' });
 		return;
 	}
 
-	if (!post) {
-		res.status(404).json({ message: 'Post not found' });
-		return;
-	}
-	
-	post.extend_date = post.backup_extend;
-	post.backup_extend = Date.now();
-	post.pay_to_extend = 0;
-
-	try {
-		await post.save();
-	} catch (err) {
-		res.status(500).json({ message: 'Confirm Extend failed' });
-		return next(err);
-	}
-	res.status(200).json(post);
-};
-
-const confirm = async (req, res, next) => {
-	let post;
-	try {
-		post = await Post.findById(req.params.post_id);
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
-
-	if (req.userData.user_type !== "Admin") {
-		res
-			.status(401)
-			.json({ message: 'You are not Admin!' });
-		return;
-	}
-
-	if (!post) {
-		res.status(404).json({ message: 'Post not found' });
-		return;
-	}
-	
-	post.status = true;
-
-	try {
-		await post.save();
-	} catch (err) {
-		res.status(500).json({ message: 'Confirm Extend failed' });
-		return next(err);
-	}
-	res.status(200).json(post);
+	post.rateSum += req.body.rating;
+	post.rateCount++;
 };
 
 exports.getAll = getAll;
@@ -352,6 +311,5 @@ exports.create = create;
 exports.update = update;
 exports.delete = _delete;
 exports.extend = extend;
-exports.confirm = confirm;
-exports.confirmExtend = confirmExtend;
 exports.like = like;
+exports.rate = rate;
