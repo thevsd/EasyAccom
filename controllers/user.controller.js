@@ -34,11 +34,12 @@ const register = async (req, res, next) => {
 		...req.body,
 		update_permit: false,
 		status: false,
+		payment: 0,
 		avatar: 'uploads/images/default-avatar.png'
 	});
 
 	// If user is renter
-	if(user.user_type.equals("Renter")) {
+	if(user.user_type === "Renter") {
 		console.log("User is renter");
 		user.status = true;
 		user.update_permit = true;
@@ -54,7 +55,7 @@ const register = async (req, res, next) => {
 		return next(err);
 	}
 
-	const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.user_id }, config, { expiresIn: '7d' });
+	const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.id }, config, { expiresIn: '7d' });
 	res.status(201).json({
 		user: {
 			userId: user.id,
@@ -83,9 +84,14 @@ const login = async (req, res, next) => {
 		res.status(404).json({ message: 'User not found. Please register.' });
 		return;
 	}
+	
+	if(!user.status) {
+		res.status(401).json({ message: 'User not yet approved.' });
+		return;
+	}
 
 	if (bcrypt.compareSync(req.body.password, user.password)) {
-		const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.user_id }, config, { expiresIn: '7d' });
+		const token = jwt.sign({ email: user.email, user_type: user.user_type, user_id: user.id }, config, { expiresIn: '7d' });
 		res.status(201).json({
 			user: {
 				userId: user.id,
@@ -133,7 +139,7 @@ const getById = async (req, res, next) => {
 const getByName = async (req, res, next) => {
 	let users;
 	try {
-		users = await User.find({ fullname: req.params.fullname }, '-password');
+		users = await User.find({ fullname: req.body.fullname }, '-password');
 	} catch (err) {
 		res.status(500).json({ message: 'Fetch failed' });
 		return next(err);
@@ -242,57 +248,6 @@ const _delete = async (req, res, _next) => {
 	res.status(201).json({});
 };
 
-const permit_update = async (req, res, next) => {
-
-	if (req.userData.user_type !== "Admin") {
-		console.log("You are not an Admin!");
-		res.status(401).json({ message: 'You are not an Admin!' });
-		return;
-	}
-
-	let target;
-	try {
-		target = await User.find({ email: req.params.email }, '-password');
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
-
-	target.permit_update = true;
-
-	try {
-		await target.save();
-	} catch (err) {
-		res.status(500).json({ message: 'Update permit failed' });
-		return next(err);
-	}
-}
-
-const permit_account = async (req, res, next) => {
-	if (req.userData.user_type !== "Admin") {
-		console.log("You are not an Admin!");
-		res.status(401).json({ message: 'You are not an Admin!' });
-		return;
-	}
-
-	let target;
-	try {
-		target = await User.find({ email: req.params.email }, '-password');
-	} catch (err) {
-		res.status(500).json({ message: 'Fetch failed' });
-		return next(err);
-	}
-
-	target.status = true;
-
-	try {
-		await target.save();
-	} catch (err) {
-		res.status(500).json({ message: 'Update permit failed' });
-		return next(err);
-	}
-}
-
 exports.register = register;
 exports.login = login;
 exports.getAll = getAll;
@@ -301,5 +256,3 @@ exports.getByName = getByName;
 exports.avatarByName = avatarByName;
 exports.update = update;
 exports.delete = _delete;
-exports.permit_update = permit_update;
-exports.permit_account = permit_account;
