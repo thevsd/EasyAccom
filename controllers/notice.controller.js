@@ -20,9 +20,6 @@ const getAll = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-    var extendDate = new Date();
-    extendDate.setDate(extendDate.getDate() + 7);
-
     const notice = new Notice ({
         user_id_sender: req.params.user_id_sender,
         user_id_receiver: req.params.user_id_receiver,

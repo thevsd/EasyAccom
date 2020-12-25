@@ -37,9 +37,6 @@ const getAll = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-    var extendDate = new Date();
-    extendDate.setDate(extendDate.getDate() + 7);
-    
     const report = new Report ({
         user_id: req.params.user_id,
         post_id: req.params.post_id,
