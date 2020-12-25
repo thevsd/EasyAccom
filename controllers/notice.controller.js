@@ -28,7 +28,7 @@ const create = async (req, res, next) => {
         user_id_receiver: req.params.user_id_receiver,
         description: req.params.description,
         date: Date.now(),
-    })
+    });
 
     try {
         await notice.save();

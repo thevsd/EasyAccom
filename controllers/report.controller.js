@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
         post_id: req.params.post_id,
         description: req.params.description,
         date: Date.now(),
-    })
+    });
 
     try {
         await report.save();
